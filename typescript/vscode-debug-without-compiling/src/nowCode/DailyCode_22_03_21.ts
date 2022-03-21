@@ -130,6 +130,6 @@ export function findPeakElement(nums: number[]): number {
 // BM20 数组中的逆序对
 export function InversePairs(data: number[]): number {
     // write code here
-    // 删除暴力解法
+    // 这题需要用归并排序。一边排序一边计算逆序对
     return
 }
