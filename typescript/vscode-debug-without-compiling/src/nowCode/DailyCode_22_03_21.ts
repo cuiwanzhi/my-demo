@@ -5,6 +5,8 @@
  * @FilePath: \vscode-debug-without-compiling\src\nowCode\DailyCode_22_03_21.ts
  */
 
+import { ListNode } from "./NowCoder_2022_02_28";
+
 // BM14 链表的奇偶重排
 export function oddEvenList(head: ListNode): ListNode {
 	// write code here
