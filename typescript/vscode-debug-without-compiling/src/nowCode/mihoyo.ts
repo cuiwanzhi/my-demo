@@ -41,13 +41,13 @@ function main(params: string[]) {
         params.shift();
         L1 = params[0].split(" ");
         L2 = params[1].split(" ");
-        console.log(func(L1, L2));
+        console.log(findMoveStepCount(L1, L2));
         params.shift();
         params.shift();
     }
 }
 
-function func(L1: string[], L2: string[]) {
+function findMoveStepCount(L1: string[], L2: string[]): number {
     let n = L1.length;
     let isStart = 0;
     let p1 =0;
