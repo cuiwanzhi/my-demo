@@ -130,5 +130,57 @@ export function findPeakElement(nums: number[]): number {
 // BM20 数组中的逆序对
 export function InversePairs(data: number[]): number {
     // 这题需要用归并排序。一边排序一边计算逆序对
-    return
+
+    /**逆序对数量 */
+    let count = 0;
+    function mergeSort(listData: number[]): number[] {
+        if (listData.length <= 1) {
+            return listData;
+        }
+    
+        if (listData.length <= 2) {
+            if (listData[0] > listData[1]) {
+                count++;
+                [listData[1], listData[0]] = [listData[0], listData[1]];
+                return listData;
+            }
+            return listData;
+        }
+
+        let halfIdx = listData.length /2;
+        // 保证前半截是双数，不知道有没有必要
+        halfIdx = halfIdx % 2 < 1? Math.floor(halfIdx) : Math.ceil(halfIdx);
+        
+        let L1 = mergeSort(listData.splice(0, halfIdx));
+        let L2 = mergeSort(listData);
+
+        let mergerList: number[] = [];
+        let L1pop = L1.pop();
+        let L2pop = L2.pop();
+        while (L1pop != void(0) && L2pop != void(0)) {
+            if (L1pop > L2pop) {
+                count += L2.length+1;
+                mergerList.unshift(L1pop);
+                L1pop = L1.pop();
+            } else {
+                mergerList.unshift(L2pop);
+                L2pop = L2.pop();
+            }
+        }
+        if (L1pop != void(0)) {
+            L1.push(L1pop);
+            mergerList = L1.concat(mergerList);
+        } else {
+            L2.push(L2pop);
+            mergerList = L2.concat(mergerList);
+        }
+        // console.log(mergerList);
+        return mergerList;
+    }
+    
+    mergeSort(data);
+    
+    return count % 1000000007;
 }
+debugger;
+InversePairs([1,2,3,4,5,6,7,0]);
