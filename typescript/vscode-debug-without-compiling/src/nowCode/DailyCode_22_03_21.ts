@@ -182,5 +182,3 @@ export function InversePairs(data: number[]): number {
     
     return count % 1000000007;
 }
-debugger;
-InversePairs([1,2,3,4,5,6,7,0]);
