@@ -5,6 +5,10 @@
  * @FilePath: \vscode-debug-without-compiling\src\nowCode\DailyCode_22_03_30.ts
  */
 
+/**
+ * 二叉树结构。
+ * 如果new的时候传入的是null。是由bug的。
+ */
 class TreeNode {
 	val: number;
 	left: TreeNode | null;
@@ -46,9 +50,9 @@ export function hasPathSum(root: TreeNode, sum: number): boolean {
 // BM30 二叉搜索树与双向链表
 export function Convert(pRootOfTree: TreeNode): TreeNode {
 	// write code here
-    if (!pRootOfTree) {
-        return pRootOfTree;
-    }
+	if (!pRootOfTree) {
+		return pRootOfTree;
+	}
 	let preNode = {
 		left: new TreeNode(),
 	};
@@ -87,29 +91,127 @@ export function Convert(pRootOfTree: TreeNode): TreeNode {
 
 // BM31 对称的二叉树
 export function isSymmetrical(pRoot: TreeNode): boolean {
-    // write code here
-    let result: TreeNode[] = [];
-    firstEach(pRoot);
-    function firstEach(node: TreeNode) {
-        if (!node) {
-            result.push(null);
-            return;
-        }
-        firstEach(node.left);
-        result.push(node);
-		firstEach(node.right);
-    }
-    let leftP = 0;
-    let rightP = result.length - 1;
-    if (rightP % 2 != 0) {
-        return false;
-    }
-    while (leftP < rightP) {
-        if (result[leftP] != result[rightP] && result[leftP].val != result[rightP].val) {
-            return false;
-        }
-        leftP++;
-        rightP--;
-    }
-    return true;
+	// write code here
+	function compare(leftNode: TreeNode, rightNode: TreeNode): boolean {
+		// == 说明两个都是为null
+		if (leftNode == rightNode) {
+			return true;
+		}
+		if (leftNode && rightNode && leftNode.val == rightNode.val) {
+			return (
+				compare(leftNode.left, rightNode.right) &&
+				compare(leftNode.right, rightNode.left)
+			);
+		} else {
+			return false;
+		}
+	}
+	return pRoot ? compare(pRoot.left, pRoot.right) : true;
 }
+
+// BM32 合并二叉树
+export function mergeTrees(t1: TreeNode, t2: TreeNode): TreeNode {
+	// write code here
+	function merge(tree1: TreeNode, tree2: TreeNode): TreeNode {
+		if (tree1 == tree2) {
+			return null;
+		}
+		if (tree1 && !tree2) {
+			return tree1;
+		}
+		if (!tree1 && tree2) {
+			return tree2;
+		}
+		return {
+			val: tree1.val + tree2.val,
+			left: merge(tree1.left, tree2.left),
+			right: merge(tree1.right, tree2.right),
+		};
+	}
+	return merge(t1, t2);
+}
+
+// BM33 二叉树的镜像
+export function Mirror(pRoot: TreeNode): TreeNode {
+	// write code here
+	if (!pRoot) {
+		return pRoot;
+	}
+	[pRoot.left, pRoot.right] = [pRoot.right, pRoot.left];
+	pRoot.left && Mirror(pRoot.left);
+	pRoot.right && Mirror(pRoot.right);
+	return pRoot;
+}
+
+// BM34 判断是不是二叉搜索树
+export function isValidBST(root: TreeNode): boolean {
+	// write code here
+
+	interface resultInterface {
+		max: number;
+		min: number;
+		isValidBST: boolean;
+	}
+
+	function isValid(node: TreeNode): resultInterface {
+		if (!node.left && !node.right) {
+			return {
+				max: node.val,
+				min: node.val,
+				isValidBST: true,
+			};
+		}
+		let result: resultInterface = {
+			max: -Infinity,
+			min: Infinity,
+			isValidBST: false,
+		};
+		if (node.left) {
+			if (node.left.val > node.val) {
+				return result;
+			}
+			let leftResult = isValid(node.left);
+			if (!leftResult.isValidBST || leftResult.max > node.val) {
+				return result;
+			}
+			result.min = leftResult.min;
+		} else {
+			result.min = node.val;
+		}
+
+		if (node.right) {
+			if (node.right.val < node.val) {
+				return result;
+			}
+			let rightResult = isValid(node.right);
+			if (!rightResult.isValidBST || rightResult.min < node.val) {
+				return result;
+			}
+
+			result.max = rightResult.max;
+		} else {
+			result.max = node.val;
+		}
+
+		result.isValidBST = true;
+		return result;
+	}
+
+	return isValid(root).isValidBST;
+}
+
+debugger;
+let root: TreeNode = {
+	val: 2,
+	left: {
+		val: 1,
+		left: null,
+		right: null,
+	},
+	right: {
+		val: 3,
+		left: null,
+		right: null,
+	},
+};
+isValidBST(root);

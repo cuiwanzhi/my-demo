@@ -5,7 +5,6 @@
  * @FilePath: \vscode-debug-without-compiling\src\nowCode\DailyCode_22_03_21.ts
  */
 
-import { InversePairs } from "./DailyCode_22_03_23";
 import { ListNode } from "./NowCoder_2022_02_28";
 
 // BM14 链表的奇偶重排
@@ -182,5 +181,4 @@ export function InversePairs(data: number[]): number {
     mergeSort(data);
     
     return count % 1000000007;
-}debugger;
-InversePairs([1,2,3,4,5,6,7,0]);
+}
