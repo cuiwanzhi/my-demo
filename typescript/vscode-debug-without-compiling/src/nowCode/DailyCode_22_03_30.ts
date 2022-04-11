@@ -88,28 +88,14 @@ export function Convert(pRootOfTree: TreeNode): TreeNode {
 // BM31 对称的二叉树
 export function isSymmetrical(pRoot: TreeNode): boolean {
     // write code here
-    let result: TreeNode[] = [];
-    firstEach(pRoot);
-    function firstEach(node: TreeNode) {
-        if (!node) {
-            result.push(null);
-            return;
-        }
-        firstEach(node.left);
-        result.push(node);
-		firstEach(node.right);
-    }
-    let leftP = 0;
-    let rightP = result.length - 1;
-    if (rightP % 2 != 0) {
-        return false;
-    }
-    while (leftP < rightP) {
-        if (result[leftP] != result[rightP] && result[leftP].val != result[rightP].val) {
-            return false;
-        }
-        leftP++;
-        rightP--;
-    }
-    return true;
+	if (!pRoot) {
+		return true;
+	}
+    function compare(leftRoot: TreeNode, rightRoot: TreeNode) {
+		if (!leftRoot && !rightRoot) {
+			return true;
+		} else if (leftRoot.val == leftRoot.val) {
+			
+		}
+	}
 }
