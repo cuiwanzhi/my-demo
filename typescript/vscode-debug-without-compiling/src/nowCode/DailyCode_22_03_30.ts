@@ -91,15 +91,14 @@ export function Convert(pRootOfTree: TreeNode): TreeNode {
 
 // BM31 对称的二叉树
 export function isSymmetrical(pRoot: TreeNode): boolean {
-    // write code here
+	// write code here
 	if (!pRoot) {
 		return true;
 	}
-    function compare(leftRoot: TreeNode, rightRoot: TreeNode) {
+	function compare(leftRoot: TreeNode, rightRoot: TreeNode) {
 		if (!leftRoot && !rightRoot) {
 			return true;
 		} else if (leftRoot.val == leftRoot.val) {
-			
 		}
 	}
 }
@@ -161,7 +160,7 @@ export function isValidBST(root: TreeNode): boolean {
 	return isValid(root).isValidBST;
 }
 
-debugger;
+/*
 let root: TreeNode = {
 	val: 2,
 	left: {
@@ -175,4 +174,149 @@ let root: TreeNode = {
 		right: null,
 	},
 };
-isValidBST(root);
+isValidBST(root); */
+
+// BM35 判断是不是完全二叉树
+export function isCompleteTree(root: TreeNode): boolean {
+	// write code here
+	let nextLevelNodes: TreeNode[] = [root];
+	let hasNull: boolean = false;
+	while (nextLevelNodes.length > 0) {
+		let currLevelNodes = nextLevelNodes;
+		nextLevelNodes = [];
+		for (let index = 0; index < currLevelNodes.length; index++) {
+			const node = currLevelNodes[index];
+			if (!node.left && node.right) {
+				return false;
+			}
+			if (node.left || node.right) {
+				if (hasNull) {
+					return false;
+				}
+			}
+			hasNull = !node.left || !node.right;
+			node.left && nextLevelNodes.push(node.left);
+			node.right && nextLevelNodes.push(node.right);
+		}
+	}
+	return true;
+}
+
+// BM36 判断是不是平衡二叉树
+export function IsBalanced_Solution(pRoot: TreeNode): boolean {
+    // write code here
+	let IsBalancedTree = true;
+	function maxDepth(root: TreeNode): number {
+		if (!root ||  !IsBalancedTree) {
+			return 0;
+		}
+		let leftDepth = maxDepth(root.left);
+		let rightDepth = maxDepth(root.right);
+		if (Math.abs(leftDepth - rightDepth) > 1) {
+			IsBalancedTree = false;
+		}
+		return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+	}
+	maxDepth(pRoot);
+	return IsBalancedTree;
+}
+
+// BM37 二叉搜索树的最近公共祖先
+export function lowestCommonAncestor(root: TreeNode, p: number, q: number): number {
+    // write code here
+	let minNum = Math.min(p, q);
+	let maxNum = Math.max(p, q);
+	if (minNum <= root.val && root.val <= maxNum) {
+		return root.val;
+	}
+	if (root.val > maxNum) {
+		return lowestCommonAncestor(root.left, p, q);
+	} else {
+		return lowestCommonAncestor(root.right, p, q);
+	}
+}
+
+// BM38 在二叉树中找到两个节点的最近公共祖先
+export function lowestCommonAncestor_2(root: TreeNode, o1: number, o2: number): number {
+    // write code here
+	let result: number;
+	/**
+	 * @description: 寻找能够找到几个节点在自己之下
+	 * @param {TreeNode} root 当前节点
+	 * @return {number} 自己之下有几个目标节点
+	 */
+	function find(root: TreeNode): number {
+		if (!root) {
+			return 0;
+		}
+		let findSum = 0;
+		if (root.val  == o1 || root.val == o2) {
+			findSum++;
+		}
+		findSum += find(root.left);
+		if (findSum == 2) {
+			if (result == void(0)) {
+				result = root.val;
+			}
+			return findSum;
+		}
+		findSum += find(root.right);
+		if (findSum == 2) {
+			if (result == void(0)) {
+				result = root.val;
+			}
+			return findSum;
+		}
+		return findSum;
+	}
+	find(root);
+	return result;
+
+}
+
+// BM39 序列化二叉树
+export function Serialize(root: TreeNode): string {
+    // write code here
+	if (!root) {
+		return "{}";
+	}
+	let results: any[] = [];
+	function dfsEach(node: TreeNode, index: number) {
+		results[index] = node.val;
+		node.left && dfsEach(node.left, 2 * index);
+		node.right && dfsEach(node.right, 2 * index + 1);
+	}
+	dfsEach(root, 1);
+	// 移除最前面的一个数。因为下标从1开始
+	results.shift();
+	for (let index = 0; index < results.length; index++) {
+		if (results[index] == void(0)) {
+			results[index] = '#';
+		}
+	}
+	return '[' + results.toString() + ']';
+}
+// BM39 反序列化二叉树
+export function Deserialize(str: string): TreeNode {
+  // write code here
+	str = str.substring(1, str.length - 1);
+	let data = str.split(",");
+	if (data.length <= 1 && !data [0]) {
+		return null;
+	}
+	// 下标从1开始
+	data.unshift("p");
+	function dfsEach(index: number): TreeNode{
+		let val = data[index];
+		if (!Number.isInteger(+val)) {
+			return null;
+		}
+		let node: TreeNode = {
+			val: +val,
+			left: dfsEach(2 * index),
+			right: dfsEach(2 * index + 1),
+		}
+		return node;
+	}
+	return dfsEach(1);
+}
