@@ -20,7 +20,7 @@ rl.on('close', function () {
     main(arr);
 }); */
 
-debugger;
+// debugger;
 arr = [
     "2"
     ,"6"

@@ -204,10 +204,10 @@ export function isCompleteTree(root: TreeNode): boolean {
 
 // BM36 判断是不是平衡二叉树
 export function IsBalanced_Solution(pRoot: TreeNode): boolean {
-    // write code here
+	// write code here
 	let IsBalancedTree = true;
 	function maxDepth(root: TreeNode): number {
-		if (!root ||  !IsBalancedTree) {
+		if (!root || !IsBalancedTree) {
 			return 0;
 		}
 		let leftDepth = maxDepth(root.left);
@@ -222,8 +222,12 @@ export function IsBalanced_Solution(pRoot: TreeNode): boolean {
 }
 
 // BM37 二叉搜索树的最近公共祖先
-export function lowestCommonAncestor(root: TreeNode, p: number, q: number): number {
-    // write code here
+export function lowestCommonAncestor(
+	root: TreeNode,
+	p: number,
+	q: number
+): number {
+	// write code here
 	let minNum = Math.min(p, q);
 	let maxNum = Math.max(p, q);
 	if (minNum <= root.val && root.val <= maxNum) {
@@ -237,8 +241,12 @@ export function lowestCommonAncestor(root: TreeNode, p: number, q: number): numb
 }
 
 // BM38 在二叉树中找到两个节点的最近公共祖先
-export function lowestCommonAncestor_2(root: TreeNode, o1: number, o2: number): number {
-    // write code here
+export function lowestCommonAncestor_2(
+	root: TreeNode,
+	o1: number,
+	o2: number
+): number {
+	// write code here
 	let result: number;
 	/**
 	 * @description: 寻找能够找到几个节点在自己之下
@@ -250,19 +258,19 @@ export function lowestCommonAncestor_2(root: TreeNode, o1: number, o2: number): 
 			return 0;
 		}
 		let findSum = 0;
-		if (root.val  == o1 || root.val == o2) {
+		if (root.val == o1 || root.val == o2) {
 			findSum++;
 		}
 		findSum += find(root.left);
 		if (findSum == 2) {
-			if (result == void(0)) {
+			if (result == void 0) {
 				result = root.val;
 			}
 			return findSum;
 		}
 		findSum += find(root.right);
 		if (findSum == 2) {
-			if (result == void(0)) {
+			if (result == void 0) {
 				result = root.val;
 			}
 			return findSum;
@@ -271,12 +279,11 @@ export function lowestCommonAncestor_2(root: TreeNode, o1: number, o2: number): 
 	}
 	find(root);
 	return result;
-
 }
 
 // BM39 序列化二叉树
 export function Serialize(root: TreeNode): string {
-    // write code here
+	// write code here
 	if (!root) {
 		return "{}";
 	}
@@ -290,23 +297,23 @@ export function Serialize(root: TreeNode): string {
 	// 移除最前面的一个数。因为下标从1开始
 	results.shift();
 	for (let index = 0; index < results.length; index++) {
-		if (results[index] == void(0)) {
-			results[index] = '#';
+		if (results[index] == void 0) {
+			results[index] = "#";
 		}
 	}
-	return '[' + results.toString() + ']';
+	return "[" + results.toString() + "]";
 }
 // BM39 反序列化二叉树
 export function Deserialize(str: string): TreeNode {
-  // write code here
+	// write code here
 	str = str.substring(1, str.length - 1);
 	let data = str.split(",");
-	if (data.length <= 1 && !data [0]) {
+	if (data.length <= 1 && !data[0]) {
 		return null;
 	}
 	// 下标从1开始
 	data.unshift("p");
-	function dfsEach(index: number): TreeNode{
+	function dfsEach(index: number): TreeNode {
 		let val = data[index];
 		if (!Number.isInteger(+val)) {
 			return null;
@@ -315,8 +322,69 @@ export function Deserialize(str: string): TreeNode {
 			val: +val,
 			left: dfsEach(2 * index),
 			right: dfsEach(2 * index + 1),
-		}
+		};
 		return node;
 	}
 	return dfsEach(1);
+}
+
+// BM40 重建二叉树 通过前序和中序，构造二叉树
+export function reConstructBinaryTree(pre: number[], vin: number[]): TreeNode {
+	// write code here
+	/**pre中的当前扫描到的根节点 */
+	let rootIdx = 0;
+	/**
+	 * @description: 构造二叉树
+	 * @param {number} currIdx 当前元素在中序中的位置
+	 * @param {number} startIdx 当前树结构的开始位置
+	 * @param {number} endIdx 当前树结构的结束位置
+	 * @return {TreeNode}
+	*/
+	function build(currIdx: number, startIdx: number, endIdx: number): TreeNode {
+		if (rootIdx == vin.length) {
+			return null;
+		}
+		let node: TreeNode = {
+			val: vin[currIdx],
+			left: null,
+			right: null,
+		}
+		if (startIdx >= endIdx) {
+			return node;
+		}
+		if (startIdx < currIdx) {
+			rootIdx++;
+			let leftRootVal = pre[rootIdx];
+			node.left = build(vin.indexOf(leftRootVal, startIdx), startIdx, currIdx - 1);
+		}
+		if (currIdx < endIdx) {
+			rootIdx++;
+			let rightRootVal = pre[rootIdx];
+			node.right = build(vin.indexOf(rightRootVal, currIdx), currIdx + 1, endIdx);
+		}
+		return node;
+	}
+	return build(vin.indexOf(pre[0]), 0, vin.length - 1);
+}
+
+// debugger;
+// reConstructBinaryTree([1, 2, 4, 7, 3, 5, 6, 8], [4, 7, 2, 1, 5, 3, 8, 6]);
+
+// BM41 输出二叉树的右视图, 根据二叉树的前序遍历，中序遍历恢复二叉树，并打印出二叉树的右视图
+export function solve(pre: number[], vin: number[]): number[] {
+    // write code here
+    let result: number[] = [];
+    let root = reConstructBinaryTree(pre, vin);
+    let nextLevelNodes: TreeNode[] = [root];
+    while (nextLevelNodes.length > 0) {
+        result.push(nextLevelNodes[nextLevelNodes.length - 1].val);
+		let currLevelNodes = nextLevelNodes;
+		nextLevelNodes = [];
+		for (let index = 0; index < currLevelNodes.length; index++) {
+			const node = currLevelNodes[index];
+			node.left && nextLevelNodes.push(node.left);
+			node.right && nextLevelNodes.push(node.right);
+		}
+    }
+    return result;
 }
