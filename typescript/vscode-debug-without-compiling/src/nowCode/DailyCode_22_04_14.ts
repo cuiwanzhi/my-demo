@@ -67,7 +67,7 @@ export function isValid(s: string): boolean {
 		const item = s[idx];
 		let lastMatch = matchStack[matchStack.length - 1];
 		switch (item) {
-			case '(':
+			case "(":
 			case '[':
 			case '{':
 				matchStack.push(item);
@@ -133,3 +133,93 @@ export function maxInWindows(num: number[], size: number): number[] {
 	}
 	return results;
 }
+
+// BM46 最小的K个数
+export function GetLeastNumbers_Solution(input: number[], k: number): number[] {
+    // write code here
+	/**
+	 * @description: 使用快排思想来来对数据进行分类，比答案效率还要高
+	 * @param {number} start 开始下标
+	 * @param {number} end 结束下标
+	 */	
+	function findSort(start: number, end: number) {
+		let topVal = input[start];
+		/**空位置 */
+		let tmpIdx = start;
+		let preIdx = start;
+		let endIdx = end;
+		while (preIdx < endIdx) {
+			while (preIdx < endIdx) {
+				if (input[endIdx] < topVal) {
+					input[tmpIdx] = input[endIdx];
+					tmpIdx = endIdx;
+					break;
+				}
+				endIdx--;
+			}
+			while (preIdx < endIdx) {
+				if (input[preIdx] >= topVal) {
+					input[tmpIdx] = input[preIdx];
+					tmpIdx = preIdx;
+					break;
+				}
+				preIdx++;
+			}
+		}
+		input[tmpIdx] = topVal;
+		if (k < tmpIdx) {
+			findSort(start, tmpIdx);
+		}else if (k > tmpIdx) {
+			findSort(tmpIdx + 1, end);
+		}
+	}
+	findSort(0, input.length - 1);
+	return input.slice(0, k);
+}
+
+// BM47 寻找第K大
+export function findKth(input: number[], n: number, k: number): number {
+    // write code here
+	k = n - k;
+	/**
+	 * @description: 使用快排思想来来对数据进行分类，比答案效率还要高
+	 * @param {number} start 开始下标
+	 * @param {number} end 结束下标
+	*/	
+	function findSort(start: number, end: number) {
+		let topVal = input[start];
+		/**空位置 */
+		let tmpIdx = start;
+		let preIdx = start;
+		let endIdx = end;
+		while (preIdx < endIdx) {
+			while (preIdx < endIdx) {
+				if (input[endIdx] < topVal) {
+					input[tmpIdx] = input[endIdx];
+					tmpIdx = endIdx;
+					break;
+				}
+				endIdx--;
+			}
+			while (preIdx < endIdx) {
+				if (input[preIdx] >= topVal) {
+					input[tmpIdx] = input[preIdx];
+					tmpIdx = preIdx;
+					break;
+				}
+				preIdx++;
+			}
+		}
+		input[tmpIdx] = topVal;
+		if (k < tmpIdx) {
+			findSort(start, tmpIdx);
+		}else if (k > tmpIdx) {
+			findSort(tmpIdx + 1, end);
+		}
+	}
+	findSort(0, input.length - 1);
+	return input[k];
+}
+
+debugger;
+findKth([10,10,9,9,8,7,5,6,4,3,4,2],12,3);
