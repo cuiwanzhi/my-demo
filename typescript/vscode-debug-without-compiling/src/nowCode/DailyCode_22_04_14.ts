@@ -186,40 +186,85 @@ export function findKth(input: number[], n: number, k: number): number {
 	 * @param {number} start 开始下标
 	 * @param {number} end 结束下标
 	*/	
-	function findSort(start: number, end: number) {
-		let topVal = input[start];
+	function findSort(start: number, end: number): number {
+		if (start == end) {
+			return input[start];
+		}
+		
 		/**空位置 */
-		let tmpIdx = start;
+		let tmpIdx = ((end + start)/ 2) | 0;
+		let topVal = input[tmpIdx];
 		let preIdx = start;
 		let endIdx = end;
 		while (preIdx < endIdx) {
-			while (preIdx < endIdx) {
-				if (input[endIdx] < topVal) {
-					input[tmpIdx] = input[endIdx];
-					tmpIdx = endIdx;
-					break;
-				}
+			while (preIdx < endIdx && input[endIdx] > topVal) {
 				endIdx--;
 			}
-			while (preIdx < endIdx) {
-				if (input[preIdx] >= topVal) {
-					input[tmpIdx] = input[preIdx];
-					tmpIdx = preIdx;
-					break;
-				}
+			if (preIdx < endIdx) {
+				input[tmpIdx] = input[endIdx];
+				tmpIdx = endIdx;
+			}
+			while (preIdx < endIdx && input[preIdx] <= topVal) {
 				preIdx++;
+			}
+			if (preIdx < endIdx) {
+				input[tmpIdx] = input[preIdx];
+				tmpIdx = preIdx;
 			}
 		}
 		input[tmpIdx] = topVal;
+		
+		if (k == tmpIdx) {
+			return input[tmpIdx];
+		}
 		if (k < tmpIdx) {
-			findSort(start, tmpIdx);
+			return findSort(start, tmpIdx - 1);
 		}else if (k > tmpIdx) {
-			findSort(tmpIdx + 1, end);
+			return findSort(tmpIdx + 1, end);
 		}
 	}
-	findSort(0, input.length - 1);
-	return input[k];
+	return findSort(0, input.length - 1);
 }
 
 debugger;
-findKth([10,10,9,9,8,7,5,6,4,3,4,2],12,3);
+findKth([9,9,12,5,10,6],6,3)
+
+function sort(input: number[], start: number, end: number) {
+	if (start >= end) {
+		return;
+	}
+	/* let tmpI = (Math.random() * end) | 0;
+	let tmpV = input[start];
+	input[start] = input[tmpI];
+	input[tmpI] = tmpV; */
+	
+	let tmpIdx = ((end + start)/ 2) | 0;
+	let topVal = input[tmpIdx];
+	let preIdx = start;
+	let endIdx = end;
+	while (preIdx < endIdx) {
+		while (preIdx < endIdx && input[endIdx] > topVal) {
+			endIdx--;
+		}
+		if (preIdx < endIdx) {
+			input[tmpIdx] = input[endIdx];
+			tmpIdx = endIdx;
+		}
+		while (preIdx < endIdx && input[preIdx] <= topVal) {
+			preIdx++;
+		}
+		if (preIdx < endIdx) {
+			input[tmpIdx] = input[preIdx];
+			tmpIdx = preIdx;
+		}
+	}
+		
+		
+	input[tmpIdx] = topVal;
+	sort(input, start, tmpIdx - 1);
+	sort(input, tmpIdx + 1, end);
+}
+
+let input = [5,4,3,2,1]
+sort(input, 0, input.length - 1);
+console.log(input);
