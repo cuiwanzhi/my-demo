@@ -226,8 +226,8 @@ export function findKth(input: number[], n: number, k: number): number {
 	return findSort(0, input.length - 1);
 }
 
-debugger;
-findKth([9,9,12,5,10,6],6,3)
+/* debugger;
+findKth([9,9,12,5,10,6],6,3) */
 
 function sort(input: number[], start: number, end: number) {
 	if (start >= end) {
@@ -265,6 +265,58 @@ function sort(input: number[], start: number, end: number) {
 	sort(input, tmpIdx + 1, end);
 }
 
-let input = [5,4,3,2,1]
+/* let input = [5,4,3,2,1]
 sort(input, 0, input.length - 1);
-console.log(input);
+console.log(input); */
+
+
+let input: number[] = [];
+
+/**
+ * @param num int整型 
+ * @return 无
+ */
+export function Insert(num: number) {
+    // write code here
+	if (!input.length || num >= input[input.length]) {
+		input.push(num);
+		return;
+	}
+	
+	let startIdx = 0;
+	let endIdx = input.length - 1;
+	let middle = (startIdx + endIdx) / 2 | 0;
+    while (num != input[middle] && startIdx < endIdx) {
+		if (num > input[middle]) {
+			startIdx = middle + 1;
+		} else {
+			endIdx = middle - 1;
+		}
+		middle = (startIdx + endIdx) / 2 | 0;
+	}
+	if (num > input[middle]) {
+		input.splice(middle + 1, 0, num);
+	} else {
+		input.splice(middle, 0, num);
+	}
+}
+
+/**
+ * @param 无 
+ * @return double浮点型
+ */
+export function GetMedian(): number {
+    // write code here
+	let median: number;
+	let length = input.length - 1;
+	if (!length) {
+		return input[0];
+	}
+	let middle = (length / 2) | 0;
+	if ((length & 1) === 0) {
+		median = input[middle];
+	} else {
+		median = (input[middle] + input[middle + 1]) / 2;
+	}
+	return +median.toFixed(2);
+}
