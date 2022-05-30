@@ -36,35 +36,37 @@ function twoSum(nums: number[], target: number): number[] {
 }
 
 function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-    let num1 = BigInt(0);
-    let num2 =  BigInt(0);
-    let tmpV = 1;
-    while (l1) {
-        num1 = num1 + BigInt(tmpV * l1.val);
-        l1 = l1.next;
-        tmpV *= 10;
-    }
-    tmpV = 1;
-    while (l2) {
-        num2 = num2 + BigInt(tmpV * l2.val);
-        l2 = l2.next;
-        tmpV *= 10;
-    }
-    let sum = (num1 + num2).toString();
     let preHead: ListNode = {
         val: 0,
         next: null
     }
-    let idx = 0;
-    while (idx < sum.length) {
+    
+    let sum: number[] = [];
+    let tmpV = 0;
+    let index = 0;
+    while (l1 || l2) {
+        tmpV = ((l1 && l1.val) || 0) + ((l2 && l2.val) || 0) + (sum[index] || 0)
+        sum[index] = tmpV % 10;
+        sum[index + 1] = (tmpV / 10) | 0;
+        index++;
+        l1 = l1? l1.next : null;
+        l2 = l2? l2.next : null;
+    }
+
+    // 去除最后一个0
+    if (sum[sum.length - 1] == 0) {
+        sum.pop();
+    }
+
+    let idx = sum.length -1;
+    while (idx >= 0) {
         preHead.next = {
             val: +(sum[idx]),
             next: preHead.next
         }
-        idx++;
+        idx--;
     }
     return preHead.next ? preHead.next : preHead;
 };
-debugger;
-addTwoNumbers(null, null)
+
 
