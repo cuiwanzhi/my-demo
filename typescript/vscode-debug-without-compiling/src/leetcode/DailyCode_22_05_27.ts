@@ -276,6 +276,3 @@ function intToRoman(num: number): string {
     }
     return result;
 };
-
-debugger;
-intToRoman(2000)
