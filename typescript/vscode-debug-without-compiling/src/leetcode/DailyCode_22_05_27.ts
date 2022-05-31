@@ -199,6 +199,83 @@ function strStr(haystack: string, needle: string): number {
     return -1;
 };
 
-debugger;
 
-strStr("mississippi", "issip")
+function maxArea(arr: number[]): number {
+    // write code here
+    let indexL = 0;
+    let indexR = arr.length -1;
+    let minHeight = Math.min(arr[indexL], arr[indexR]);
+    let water = (indexR - indexL) * minHeight;
+    while (indexL < indexR) {
+        if (arr[indexL] < arr[indexR]) {
+            indexL++;
+            if (arr[indexL] > minHeight) {
+                minHeight = Math.min(arr[indexL], arr[indexR]);
+            }
+        } else {
+            indexR--;
+            if (arr[indexR] > minHeight) {
+                minHeight = Math.min(arr[indexL], arr[indexR]);
+            }
+        }
+        water = Math.max(water, (indexR - indexL) * minHeight);
+    }
+    return water;
+}
+
+
+function intToRoman(num: number): string {
+    const valueS: {[n: number]: string} = {
+        1:       'I',             
+        5:       'V',             
+        10:      'X',             
+        50:      'L',             
+        100:     'C',             
+        500:     'D',             
+        1000:    'M',   
+    }
+    let result = "";
+    
+    let keyS = Object.keys(valueS);
+    for (let idx = keyS.length - 1; idx >= 0; idx--) {
+        const val = +keyS[idx];
+        if (num == 4) {
+            result += valueS[1] + valueS[5];
+            num -= 4;
+        } 
+        
+        else if (num == 9) {
+            result += valueS[1] + valueS[10];
+            num -= 9;
+        }
+        
+        else if ((num / 10 | 0) == 4) {
+            result += valueS[10] + valueS[50];
+            num -= 40;
+        }
+        
+        else if ((num / 10 | 0) == 9) {
+            result += valueS[10] + valueS[100];
+            num -= 90;
+        }
+        
+        else  if ((num / 100 | 0) == 4) {
+            result += valueS[100] + valueS[500];
+            num -= 400;
+        }
+        
+        else if ((num / 100 | 0) == 9) {
+            result += valueS[100] + valueS[1000];
+            num -= 900;
+        }
+        else if (num >= val) {
+            result += valueS[val];
+            idx = keyS.length;
+            num -= val;
+        }
+    }
+    return result;
+};
+
+debugger;
+intToRoman(2000)
